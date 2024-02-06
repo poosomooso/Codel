@@ -1,0 +1,7 @@
+Given an array of booleans, replace the first element with "Hello World". There will always be at least one element in the array. Do not return.
+
+replaceFirst(["wow"]) -> ["Hello World"]
+replaceFirst(["Hello world", "yes", "no"]) -> ["Hello World", "yes", "no"]
+replaceFirst(["thank", "you"]) -> ["Hello World", "you"]
+
+public void replaceFirst(String[] arr)

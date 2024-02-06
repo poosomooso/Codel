@@ -1,0 +1,7 @@
+Given an array of Strings, return the last String in the array. There will always be at least one element in the array.
+
+lastElementString(["a", "b", "c"]) -> "c"
+lastElementString(["1"]) -> "1"
+lastElementString(["hello", "goodbye"]) -> "goodbye"
+
+public String lastElementString(String[] arr)

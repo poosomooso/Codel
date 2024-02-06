@@ -1,0 +1,7 @@
+Given an array of doubles, return the last double in the array. There will always be at least one element in the array.
+
+lastElementDouble([0.0, 1.5, 2.0]) -> 2.0
+lastElementDouble([300.400]) -> 300.4
+lastElementDouble([22, 44, 189]) -> 189.0
+
+public double lastElementDouble(double[] arr)

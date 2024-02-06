@@ -1,0 +1,7 @@
+Given an array of ints, return the first int in the array. There will always be at least one element in the array.
+
+firstElementInt([0, 1, 2]) -> 0
+firstElementInt([300]) -> 300
+firstElementInt([22, 44, 189]) -> 22
+
+public int firstElementInt(int[] arr)

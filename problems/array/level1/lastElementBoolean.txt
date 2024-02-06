@@ -1,0 +1,7 @@
+Given an array of booleans, return the last boolean in the array. There will always be at least one element in the array.
+
+lastElementBoolean([true, false, false]) -> false
+lastElementBoolean([false]) -> false
+lastElementBoolean([false, false, false]) -> false
+
+public boolean lastElementBoolean(boolean[] arr)
