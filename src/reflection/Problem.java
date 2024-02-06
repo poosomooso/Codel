@@ -1,12 +1,14 @@
 package reflection;
 
+import reflection.testcases.TestCase;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.regex.*;
 
-public class Problem<P, R> {
+public class Problem {
 
     private static Pattern fileStructure = Pattern.compile(
             "(?<desc>.*)"
@@ -17,7 +19,7 @@ public class Problem<P, R> {
                     + "\\s*",
             Pattern.DOTALL // . includes new lines
     );
-    public static void parseFile(String url) {
+    public static Problem parseFile(String url) {
         String s = "";
         try {
             s = Files.readString(Path.of("problems/array/level1/firstElementBoolean.txt"));
@@ -44,6 +46,7 @@ public class Problem<P, R> {
             throw new IllegalStateException(e2);
         }
 
+        return new Problem(desc, signature);
     }
 
     public static void main(String[] args) {
@@ -53,17 +56,26 @@ public class Problem<P, R> {
         System.out.println(a.execute(new boolean[]{false, false, false}));
     }
 
-    private String problemDescription;
-    private Map<P, R> testCases;
-    private String methodSignature;
+    private final String problemDescription;
+    private ArrayList<TestCase> testCases;
+    private final String methodSignature;
 
-    public Problem() {
-
+    public Problem(String problemDescription, String methodSignature) {
+        testCases = new ArrayList<>();
+        this.problemDescription = problemDescription;
+        this.methodSignature = methodSignature;
     }
 
-    public void addTestCase(P params, R returnVal) {
-        testCases.put(params, returnVal);
+    public void addTestCase(TestCase tc) {
+        testCases.add(tc);
     }
 
 
+    public String getProblemDescription() {
+        return problemDescription;
+    }
+
+    public String getMethodSignature() {
+        return methodSignature;
+    }
 }
