@@ -10,13 +10,16 @@ import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.dnd.*;
 import java.io.IOException;
+import java.util.ArrayList;
 
 // adapted from the TestDnD class
 public class ActivityWindow extends JPanel{
 
     private JList<TransferableSnippet> list;
+    private ArrayList<String> code;
 
     public ActivityWindow(Problem p) {
+        code = new ArrayList<>();
         setLayout(new BorderLayout());
         list = new JList<>();
         DefaultListModel<TransferableSnippet> model = new DefaultListModel<>();
@@ -40,21 +43,35 @@ public class ActivityWindow extends JPanel{
                 new DragGestureHandler(list));
 
         JPanel panel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.anchor = GridBagConstraints.FIRST_LINE_START;
+
         // method signature
         JLabel sig = new JLabel(p.getMethodSignature());
-        GridBagConstraints gbcSig = new GridBagConstraints();
-        gbcSig.gridx = 0;
-        gbcSig.gridy = 0;
-        panel.add(sig, gbcSig);
+        gbc.gridy = 0;
+        panel.add(sig, gbc);
+
+        JLabel openBracket = new JLabel("{");
+        gbc.gridy++;
+        panel.add(openBracket, gbc);
+
 
         // dnd panel
         JPanel dndPanel = new JPanel(new GridBagLayout());
-        GridBagConstraints gbcDnD = new GridBagConstraints();
-        gbcDnD.gridx = 0;
-        gbcDnD.gridy = 1;
-        gbcDnD.gridheight = 100;
-        gbcDnD.gridwidth = 100;
-        panel.add(dndPanel, gbcDnD);
+        gbc.gridy++;
+        gbc.insets = new Insets(0, 40, 0, 0);
+        panel.add(dndPanel, gbc);
+
+        JLabel closeBracket = new JLabel("}");
+        gbc.gridy++;
+        gbc.insets = new Insets(0,0,0,0);
+        panel.add(closeBracket, gbc);
+
+        JButton submit = new JButton("Submit");
+        submit.addActionListener(new SubmitActionListener(p, code));
+        gbc.gridy++;
+        panel.add(submit, gbc);
 
         add(panel);
 
@@ -149,6 +166,7 @@ public class ActivityWindow extends JPanel{
                             panel.add(new JLabel(snippet));
                             panel.revalidate();
                             panel.repaint();
+                            code.add(snippet);
                         } else {
                             dtde.rejectDrop();
                         }
