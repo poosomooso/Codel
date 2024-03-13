@@ -73,6 +73,11 @@ public class ActivityWindow extends JPanel{
         gbc.gridy++;
         panel.add(submit, gbc);
 
+        JButton restart = new JButton("Restart");
+        restart.addActionListener(new RestartActionListener(dndPanel, code));
+        gbc.gridy++;
+        panel.add(restart, gbc);
+
         add(panel);
 
         DropTarget dt = new DropTarget(

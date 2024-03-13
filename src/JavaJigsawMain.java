@@ -20,7 +20,7 @@ public class JavaJigsawMain {
                          UnsupportedLookAndFeelException ignored) {
                 }
 
-                JFrame frame = new JFrame("Codel");
+                JFrame frame = new JFrame("Java Jigsaw");
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 frame.setLayout(new BorderLayout());
                 frame.add(new ActivityWindow(p));
