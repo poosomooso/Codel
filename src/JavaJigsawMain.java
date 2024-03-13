@@ -1,11 +1,14 @@
 import reflection.Problem;
 import ui.ActivityWindow;
-import ui.TestDnD;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class CodelMain {
+// TODO:
+// test cases -- execute arbitrary test cases
+// load random problems
+// opening screen to select level and topic
+public class JavaJigsawMain {
     public static void main(String[] args) {
         Problem p = Problem.parseFile("");
         EventQueue.invokeLater(new Runnable() {

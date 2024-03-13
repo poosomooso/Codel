@@ -1,7 +1,7 @@
 Given an array of booleans, return the first boolean in the array. There will always be at least one element in the array.
 
-firstElementBoolean([true, false, false]) -> true
-firstElementBoolean([false]) -> false
-firstElementBoolean([false, false, false]) -> false
+firstElementBoolean({true, false, false}) -> true
+firstElementBoolean({false}) -> false
+firstElementBoolean({false, false, false}) -> false
 
 public boolean firstElementBoolean(boolean[] arr)

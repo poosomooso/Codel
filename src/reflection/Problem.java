@@ -3,6 +3,7 @@ package reflection;
 import reflection.testcases.TestCase;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
@@ -10,7 +11,7 @@ import java.util.regex.*;
 
 public class Problem {
 
-    private static Pattern fileStructure = Pattern.compile(
+    private static final Pattern FILE_STRUCTURE = Pattern.compile(
             "(?<desc>.*)"
                     + "(\\s+){2}" // two newlines
                     + "(?<testcases>.*)"
@@ -19,6 +20,7 @@ public class Problem {
                     + "\\s*",
             Pattern.DOTALL // . includes new lines
     );
+
     public static Problem parseFile(String url) {
         String s = "";
         try {
@@ -27,7 +29,7 @@ public class Problem {
             throw new IllegalArgumentException("File " + url + "is not found");
         }
 
-        Matcher m = fileStructure.matcher(s);
+        Matcher m = FILE_STRUCTURE.matcher(s);
         System.out.println("File Structure valid: " + m.matches());
         String desc = m.group("desc");
         String testCasesFull = m.group("testcases");
@@ -35,39 +37,56 @@ public class Problem {
         String returntype = m.group("returntype");
         String params = m.group("params");
 
-        Class retClass;
+        // assuming one parameter
+        String paramType = params.strip().split(" ")[0];
 
-        String cappedReturnType = returntype.substring(0,1).toUpperCase() + returntype.substring(1);
-        try {
-            retClass = Class.forName("java.lang." + cappedReturnType);
-        } catch (ClassNotFoundException e2) {
-            System.out.println(returntype);
-            System.out.println("Not a class");
-            throw new IllegalStateException(e2);
+        Problem p = new Problem(desc, signature,
+                TypeValuePair.classFromString(paramType),
+                TypeValuePair.classFromString(returntype),
+                "func"); // TODO: maybe one day i will actually parse the method name
+
+        String[] testCaseLines = testCasesFull.strip().split("[\\r\\n]+");
+        for (String line : testCaseLines) {
+            try {
+                p.addTestCase(TestCase.parseTestCase(line, returntype, paramType));
+            } catch (NoSuchMethodException | InvocationTargetException | InstantiationException |
+                     IllegalAccessException e) {
+                throw new IllegalStateException(e);
+            }
         }
 
-        return new Problem(desc, signature);
+        return p;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws AnswerCompilationException {
         parseFile("");
 
         Answer a = new Answer("public boolean firstElementBoolean(boolean[] arr)", "return arr[0];");
-        System.out.println(a.execute(new boolean[]{false, false, false}));
+        //System.out.println(a.execute(new boolean[]{false, false, false}));
     }
 
     private final String problemDescription;
     private ArrayList<TestCase> testCases;
     private final String methodSignature;
+    private final Type paramType;
+    private final Type returnType;
+    private final String methodName;
 
-    public Problem(String problemDescription, String methodSignature) {
+    public Problem(String problemDescription, String methodSignature, Type paramType, Type returnType, String methodName) {
         testCases = new ArrayList<>();
         this.problemDescription = problemDescription;
         this.methodSignature = methodSignature;
+        this.paramType = paramType;
+        this.returnType = returnType;
+        this.methodName = methodName;
     }
 
     public void addTestCase(TestCase tc) {
         testCases.add(tc);
+    }
+
+    public List<TestCase> getTestCases() {
+        return testCases;
     }
 
 
@@ -77,5 +96,17 @@ public class Problem {
 
     public String getMethodSignature() {
         return methodSignature;
+    }
+
+    public String getCompilableMethodSignature() {
+        return "public " + returnType.getName() + " " + methodName + "(" + paramType.getName() + " arr)";
+    }
+
+    public Type getParamType() {
+        return paramType;
+    }
+
+    public Type getReturnType() {
+        return returnType;
     }
 }

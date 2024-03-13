@@ -1,7 +1,7 @@
 Given an array of ints, return the last int in the array. There will always be at least one element in the array.
 
-lastElementInt([0, 1, 2]) -> 2
-lastElementInt([300]) -> 300
-lastElementInt([22, 44, 189]) -> 189
+lastElementInt({0, 1, 2}) -> 2
+lastElementInt({300}) -> 300
+lastElementInt({22, 44, 189}) -> 189
 
 public int lastElementInt(int[] arr)

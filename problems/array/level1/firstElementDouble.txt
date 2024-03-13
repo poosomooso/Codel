@@ -1,7 +1,7 @@
 Given an array of doubles, return the first double in the array. There will always be at least one element in the array.
 
-firstElementDouble([0.0, 1.5, 2.0]) -> 0.0
-firstElementDouble([300.400]) -> 300.4
-firstElementDouble([22, 44, 189]) -> 22.0
+firstElementDouble({0.0, 1.5, 2.0}) -> 0.0
+firstElementDouble({300.400}) -> 300.4
+firstElementDouble({22, 44, 189}) -> 22.0
 
 public double firstElementDouble(double[] arr)

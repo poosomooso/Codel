@@ -1,7 +1,7 @@
 Given an array of Strings, return the first String in the array. There will always be at least one element in the array.
 
-firstElementString(["a", "b", "c"]) -> "a"
-firstElementString(["1"]) -> "1"
-firstElementString(["hello", "goodbye"]) -> "hello"
+firstElementString({"a", "b", "c"}) -> "a"
+firstElementString({"1"}) -> "1"
+firstElementString({"hello", "goodbye"}) -> "hello"
 
 public String firstElementString(String[] arr)

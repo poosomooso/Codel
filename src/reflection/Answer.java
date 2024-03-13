@@ -7,6 +7,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.*;
 import java.util.Arrays;
+import java.util.Locale;
 
 public class Answer {
 
@@ -16,7 +17,7 @@ public class Answer {
 
     private final String className = "TestClass";
 
-    public Answer(String signature, String a) {
+    public Answer(String signature, String a) throws AnswerCompilationException {
         classImpl = "public class " + className + " { " + signature + " { " + a + " } }";
         System.out.println(classImpl);
         try {
@@ -29,7 +30,7 @@ public class Answer {
     }
 
     // source: java2s.com/Code/Java/JDK-6/CompileaJavafilewithJavaCompiler.htm
-    private void compileClass() {
+    private void compileClass() throws AnswerCompilationException {
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
         DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<JavaFileObject>();
         StandardJavaFileManager fileManager = compiler.getStandardFileManager(diagnostics, null, null);
@@ -44,15 +45,28 @@ public class Answer {
             throw new RuntimeException(e);
         }
         System.out.println("Successful compilation: " + success);
+        if (!success) {
+            String message = "";
+            for (Diagnostic<? extends JavaFileObject> diagnostic : diagnostics.getDiagnostics()) {
+                message += diagnostic.getMessage(Locale.ENGLISH);
+            }
+
+            throw new AnswerCompilationException(message); // TODO: put an error message or something
+        }
     }
 
-    public boolean execute(boolean[] param) {
+    public Object execute(TypeValuePair param) {
         try {
+            System.out.println(className);
+            System.out.println(methodName);
             File f = new File(".");
             ClassLoader cl = new URLClassLoader(new URL[]{f.toURI().toURL()});
             Class<?> c = cl.loadClass(className);
-            Method method = c.getMethod(methodName, boolean[].class);
-            return (Boolean) method.invoke(c.getConstructor().newInstance(), param);
+            System.out.println(param.getJavaType().getType());
+            System.out.println(param.getJavaValue().getClass());
+            Method method = c.getMethod(methodName, param.getJavaType().getType());
+
+            return method.invoke(c.getConstructor().newInstance(), param.getJavaValue());
         } catch (MalformedURLException | ClassNotFoundException | NoSuchMethodException | InvocationTargetException |
                  IllegalAccessException | InstantiationException e) {
             throw new RuntimeException(e);

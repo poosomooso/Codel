@@ -1,15 +1,15 @@
 package reflection.testcases;
 
-import reflection.testcases.TestCase;
+import reflection.Answer;
 
 public class VoidTestCase implements TestCase {
     @Override
-    public void getParams() {
-
+    public Object getParams() {
+        return null;
     }
 
     @Override
-    public boolean checkAnswer(Object o) {
+    public boolean checkAnswer(Answer a) {
         return false;
     }
 }
