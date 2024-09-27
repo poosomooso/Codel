@@ -4,6 +4,8 @@ import reflection.testcases.TestCase;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
@@ -21,12 +23,12 @@ public class Problem {
             Pattern.DOTALL // . includes new lines
     );
 
-    public static Problem parseFile(String url) {
+    public static Problem parseFile(URL url) {
         String s = "";
         try {
-            s = Files.readString(Path.of("problems/array/level1/firstElementBoolean.txt"));
-        } catch (IOException e) {
-            throw new IllegalArgumentException("File " + url + "is not found");
+            s = Files.readString(Path.of(url.toURI()));
+        } catch (IOException | URISyntaxException e) {
+            throw new IllegalArgumentException("File " + url + " is not found");
         }
 
         Matcher m = FILE_STRUCTURE.matcher(s);
@@ -59,7 +61,6 @@ public class Problem {
     }
 
     public static void main(String[] args) throws AnswerCompilationException {
-        parseFile("");
 
         Answer a = new Answer("public boolean firstElementBoolean(boolean[] arr)", "return arr[0];");
         //System.out.println(a.execute(new boolean[]{false, false, false}));
